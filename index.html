@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aadarsha Bhattarai</title>
+<meta name="description" content="Aadarsha Bhattarai, full stack developer. About, blog, notes and tech.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#ffffff; --fg:#141414; --muted:#6d6d6d; --faint:#909090; --line:#eaeaea;
+  --surface:#ffffff; --surface-2:#f7f7f7; --hover:#f2f2f2; --accent:#141414;
+  --on-accent:#ffffff; --ring:#141414; --code-key:#141414; --code-str:#2f7d5c; --code-bool:#8a5a00;
+  --radius:10px;
+  --font:"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --wrap:840px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b0b0c; --fg:#f1f1f1; --muted:#9b9b9b; --faint:#6f6f6f; --line:#232326;
+    --surface:#0f0f11; --surface-2:#161618; --hover:#1b1b1e; --accent:#f1f1f1;
+    --on-accent:#0b0b0c; --ring:#f1f1f1; --code-key:#f1f1f1; --code-str:#7fd6a8; --code-bool:#e0b062;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b0b0c; --fg:#f1f1f1; --muted:#9b9b9b; --faint:#6f6f6f; --line:#232326;
+  --surface:#0f0f11; --surface-2:#161618; --hover:#1b1b1e; --accent:#f1f1f1;
+  --on-accent:#0b0b0c; --ring:#f1f1f1; --code-key:#f1f1f1; --code-str:#7fd6a8; --code-bool:#e0b062;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;font-size:15px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--ring);outline-offset:2px;border-radius:4px}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 22px;width:100%}
+.mono-num{font-variant-numeric:tabular-nums}
+
+/* Header */
+header.top{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--bg) 88%, transparent);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
+.top-inner{max-width:var(--wrap);margin:0 auto;padding:0 22px;height:58px;display:flex;align-items:center;gap:16px}
+.brand{font-weight:600;font-size:15px;letter-spacing:-.01em;white-space:nowrap}
+.brand span{color:var(--faint);font-weight:500}
+nav.tabs{display:flex;gap:2px;margin-left:6px}
+nav.tabs a{color:var(--muted);font-size:14px;font-weight:500;padding:6px 10px;border-radius:8px;line-height:1}
+nav.tabs a:hover{color:var(--fg);background:var(--hover)}
+nav.tabs a.active{color:var(--fg);background:var(--surface-2)}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:8px}
+.search{position:relative;display:flex;align-items:center;gap:8px;height:36px;padding:0 10px;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);width:210px;transition:width .16s,border-color .16s,box-shadow .16s}
+.search:focus-within{border-color:var(--fg);width:250px;box-shadow:0 0 0 3px color-mix(in srgb,var(--fg) 8%,transparent)}
+.search svg.mag{width:15px;height:15px;color:var(--faint);flex:none}
+.search input{border:0;background:transparent;color:var(--fg);font-family:inherit;font-size:14px;width:100%;outline:none}
+.search input::placeholder{color:var(--faint)}
+.search input::-webkit-search-cancel-button{display:none}
+.search .kbd{font-family:var(--mono);font-size:11px;color:var(--faint);border:1px solid var(--line);border-radius:5px;padding:1px 5px;line-height:1.4;background:var(--surface)}
+.search.typing .kbd{display:none}
+.search .clear{display:none;border:0;background:transparent;color:var(--faint);cursor:pointer;font-size:15px;line-height:1;padding:2px}
+.search.typing .clear{display:block}
+.search .clear:hover{color:var(--fg)}
+@media (max-width:560px){.search{width:44px;padding:0 9px}.search:focus-within{width:180px}.search input,.search .kbd{display:none}.search.typing{width:180px}.search.typing input{display:block}}
+.icon-btn{width:36px;height:36px;display:grid;place-items:center;border:1px solid var(--line);border-radius:9px;background:var(--surface-2);color:var(--fg);cursor:pointer}
+.icon-btn:hover{background:var(--hover)}
+.icon-btn svg{width:17px;height:17px}
+
+/* Views */
+main{flex:1 0 auto;padding:52px 0 80px;width:100%}
+.view{display:none;animation:fade .22s ease both}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:600;margin:0 0 14px}
+h1.title{font-size:clamp(2rem,6vw,2.9rem);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0;text-wrap:balance}
+h2.head{font-size:1.5rem;font-weight:600;letter-spacing:-.02em;margin:0 0 4px}
+.lead{color:var(--muted);margin:6px 0 0}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:1fr;gap:28px;align-items:stretch}
+@media (min-width:760px){.about-grid{grid-template-columns:1fr 330px;gap:40px}}
+.role{margin-top:12px;font-size:1.05rem;font-weight:500;color:var(--muted)}
+.about-body{margin-top:24px;max-width:60ch;color:var(--fg)}
+.about-body p{margin:0 0 15px}
+.about-body .soft{color:var(--muted)}
+.socials{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.social{display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid var(--line);border-radius:9px;background:var(--surface);font-size:14px;font-weight:500;transition:border-color .15s,background .15s}
+.social:hover{border-color:var(--fg);background:var(--hover)}
+.social svg{width:17px;height:17px;flex:none}
+.social small{color:var(--faint);font-weight:400}
+.card{border:1px solid var(--line);border-radius:12px;background:var(--surface-2);overflow:hidden;display:flex;flex-direction:column;height:100%}
+.card .bar{display:flex;align-items:center;gap:7px;padding:11px 13px;border-bottom:1px solid var(--line);background:var(--surface);flex-shrink:0}
+.card .bar .dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.card .bar .fname{margin-left:6px;font-family:var(--mono);font-size:12px;color:var(--faint)}
+.card pre{margin:0;padding:16px;font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--muted);white-space:pre;overflow-x:auto;flex:1 0 auto}
+.card .k{color:var(--code-key);font-weight:500}
+.card .s{color:var(--code-str)}
+.card .p{color:var(--faint)}
+.card .status{display:flex;align-items:center;gap:8px;padding:11px 13px;border-top:1px solid var(--line);background:var(--surface);font-size:12.5px;color:var(--muted);flex-shrink:0}
+.card .status .ping{width:8px;height:8px;border-radius:50%;background:#2f9e5c;box-shadow:0 0 0 3px color-mix(in srgb,#2f9e5c 25%,transparent)}
+
+/* Tech */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-top:26px}
+.tech{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);transition:border-color .15s,transform .15s}
+.tech:hover{border-color:var(--fg);transform:translateY(-2px)}
+.tech .logo{width:26px;height:26px;flex:none}
+.tech .logo svg{width:100%;height:100%;display:block}
+.tech b{font-size:14.5px;font-weight:600}
+
+/* Lists */
+.list{margin-top:26px;display:flex;flex-direction:column}
+.item{padding:22px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12.5px;color:var(--faint);margin-bottom:8px}
+.item .meta .dot{width:3px;height:3px;border-radius:50%;background:var(--faint)}
+.tag{font-size:11.5px;font-weight:600;letter-spacing:.02em;color:var(--muted);background:var(--surface-2);border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.item h3{font-size:1.18rem;font-weight:600;letter-spacing:-.01em;margin:0 0 6px;line-height:1.3}
+.item h3 a{color:inherit}
+.item h3 a:hover{text-decoration:underline;text-underline-offset:3px}
+.item p{margin:0;color:var(--muted);font-size:.97rem}
+.item .readmore{display:inline-block;margin-top:10px;font-size:13.5px;font-weight:600;color:var(--fg);border-bottom:1.5px solid var(--fg);padding-bottom:1px}
+.item .kind{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.empty{color:var(--muted);padding:40px 0;text-align:center;border:1px dashed var(--line);border-radius:var(--radius);margin-top:26px}
+.search-top{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.result-count{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+
+/* Article reader */
+.back{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--muted);margin-bottom:22px}
+.back:hover{color:var(--fg)}
+.article-title{font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;letter-spacing:-.02em;line-height:1.12;margin:10px 0 0;text-wrap:balance}
+.article{margin-top:26px;max-width:70ch;font-size:1.04rem;line-height:1.75;color:var(--fg)}
+.article > :first-child{margin-top:0}
+.article h1{font-size:1.6rem;margin:1.6em 0 .5em;font-weight:700;letter-spacing:-.02em}
+.article h2{font-size:1.34rem;margin:1.5em 0 .5em;font-weight:600;letter-spacing:-.01em}
+.article h3{font-size:1.14rem;margin:1.4em 0 .4em;font-weight:600}
+.article h4{font-size:1.02rem;margin:1.3em 0 .4em;font-weight:600}
+.article p{margin:0 0 1.05em}
+.article a{color:var(--fg);text-decoration:underline;text-underline-offset:2px;text-decoration-color:var(--faint)}
+.article a:hover{text-decoration-color:var(--fg)}
+.article ul,.article ol{margin:0 0 1.05em;padding-left:1.4em}
+.article li{margin:.28em 0}
+.article blockquote{margin:0 0 1.05em;padding:.4em 1.1em;border-left:3px solid var(--line);color:var(--muted)}
+.article hr{border:0;border-top:1px solid var(--line);margin:1.8em 0}
+.article code{font-family:var(--mono);font-size:.86em;background:var(--surface-2);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+.article pre.cb{margin:0 0 1.2em;padding:16px 18px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;overflow-x:auto}
+.article pre.cb code{background:none;border:0;padding:0;font-size:12.5px;line-height:1.7;color:var(--fg);display:block;white-space:pre;font-family:var(--mono)}
+.article img{max-width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px;margin:1em 0}
+.article img + em, .article em.caption{display:block;text-align:center;color:var(--faint);font-size:.85em;margin-top:-.4em}
+
+/* Publish panel */
+.panel-note{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;font-size:13.5px;color:var(--muted);margin-top:18px}
+.panel-note b{color:var(--fg)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;margin-top:20px}
+.seg button{border:0;background:var(--surface);color:var(--muted);font-family:inherit;font-size:14px;font-weight:500;padding:8px 16px;cursor:pointer}
+.seg button.on{background:var(--fg);color:var(--bg)}
+form.publish{margin-top:22px;display:flex;flex-direction:column;gap:14px}
+form.publish label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
+form.publish .hint{font-weight:400;color:var(--faint);font-size:12px}
+form.publish input,form.publish textarea{font-family:inherit;font-size:15px;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:10px 12px;width:100%}
+form.publish input:focus,form.publish textarea:focus{outline:none;border-color:var(--fg)}
+form.publish textarea{resize:vertical;min-height:90px;line-height:1.5}
+#f-body{min-height:300px;font-family:var(--mono);font-size:13.5px;line-height:1.6}
+.md-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.md-imgbtn{border:1px solid var(--line);background:var(--surface);color:var(--fg);font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:8px;cursor:pointer}
+.md-imgbtn:hover{background:var(--hover)}
+.md-tabs{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden;align-self:flex-start}
+.md-tabs button{border:0;background:var(--surface);color:var(--muted);font-family:inherit;font-size:12.5px;font-weight:600;padding:6px 13px;cursor:pointer}
+.md-tabs button.on{background:var(--fg);color:var(--bg)}
+.md-preview{border:1px solid var(--line);border-radius:9px;padding:16px 18px;background:var(--surface);min-height:120px}
+.md-preview:empty::before{content:"Nothing to preview yet.";color:var(--faint);font-size:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.btn{font-family:inherit;font-size:14px;font-weight:600;padding:9px 16px;border-radius:9px;cursor:pointer;border:1px solid var(--line);background:var(--surface);color:var(--fg)}
+.btn:hover{background:var(--hover)}
+.btn.primary{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn.primary:hover{opacity:.88}
+.admin-list{margin-top:30px;border-top:1px solid var(--line);padding-top:20px}
+.admin-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}
+.admin-row .info{flex:1;min-width:0}
+.admin-row .info b{font-size:14.5px;font-weight:600}
+.admin-row .info span{display:block;font-size:12.5px;color:var(--faint)}
+.admin-row .del{border:0;background:transparent;color:#c0392b;font-size:13px;font-weight:600;cursor:pointer;padding:4px 6px}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--fg);color:var(--bg);font-size:13.5px;font-weight:500;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;transition:.22s;z-index:80}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* Footer */
+footer{flex-shrink:0;border-top:1px solid var(--line);padding:30px 0;margin-top:40px}
+.foot-inner{max-width:var(--wrap);margin:0 auto;padding:0 22px;display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.quote{margin:0;font-size:12.5px;color:var(--fg);font-weight:500}
+.quote code{font-family:var(--mono);font-size:11.5px;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;padding:2px 6px;color:var(--muted)}
+.foot-meta{margin:0;font-size:11px;color:var(--faint);white-space:nowrap}
+@media (max-width:560px){.foot-inner{flex-direction:column;text-align:center}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <a class="brand" href="#about">Aadarsha Bhattarai <span>/ dev</span></a>
+    <nav class="tabs" id="tabs">
+      <a href="#about" data-view="about">About</a>
+      <a href="#blog" data-view="blog">Blog</a>
+      <a href="#notes" data-view="notes">Notes</a>
+      <a href="#tech" data-view="tech">Tech</a>
+    </nav>
+    <div class="top-right">
+      <div class="search" id="search">
+        <svg class="mag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+        <input id="q" type="search" placeholder="Search posts and notes" aria-label="Search posts and notes" autocomplete="off">
+        <span class="kbd" aria-hidden="true">/</span>
+        <button class="clear" id="clear" type="button" aria-label="Clear search">&times;</button>
+      </div>
+      <button class="icon-btn" id="theme" type="button" aria-label="Theme"></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- ABOUT -->
+    <section class="view" id="view-about" data-view="about">
+      <p class="eyebrow">About</p>
+      <div class="about-grid">
+        <div>
+          <h1 class="title">Aadarsha Bhattarai</h1>
+          <p class="role">Full Stack Developer</p>
+          <div class="about-body">
+            <p>Hi, I am Aadarsha. I build full stack web applications, from the database and API layer up to the interface people actually click on. I care about software that is fast, reliable, and simple to reason about.</p>
+            <p class="soft">This site is where I keep my work in public. The blog is for longer writing once I have something worked out, and notes are shorter thoughts while I am still figuring things out. Use the search box at the top to look through both.</p>
+            <p class="soft">My public profiles are below.</p>
+          </div>
+          <div class="socials">
+            <a class="social" href="mailto:ashimjunior12@gmail.com">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              Email <small>ashimjunior12@gmail.com</small>
+            </a>
+            <a class="social" href="https://github.com/ashimjunior12" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.29-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.2-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.75.81 1.2 1.84 1.2 3.1 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.05.78 2.12v3.14c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+              GitHub <small>ashimjunior12</small>
+            </a>
+            <a class="social" href="https://www.linkedin.com/in/aadarsha-bhattarai-ba75271ab/" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.64h.05c.53-1 1.83-2.06 3.77-2.06 4.03 0 4.78 2.65 4.78 6.1V21h-4v-5.3c0-1.26-.02-2.9-1.77-2.9-1.77 0-2.04 1.38-2.04 2.8V21H9z"/></svg>
+              LinkedIn <small>aadarsha-bhattarai</small>
+            </a>
+          </div>
+        </div>
+
+        <aside class="card" aria-label="Quick profile">
+          <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="fname">dev.ts</span></div>
+<pre><span class="k">const</span> dev <span class="p">=</span> {
+  name<span class="p">:</span> <span class="s">"Aadarsha"</span><span class="p">,</span>
+  role<span class="p">:</span> <span class="s">"Full Stack Developer"</span><span class="p">,</span>
+  stack<span class="p">:</span> [
+    <span class="s">"Node"</span><span class="p">,</span> <span class="s">"TypeScript"</span><span class="p">,</span>
+    <span class="s">"React"</span><span class="p">,</span>
+  ]<span class="p">,</span>
+  data<span class="p">:</span> [<span class="s">"MongoDB"</span><span class="p">,</span> <span class="s">"Redis"</span>]<span class="p">,</span>
+  ships<span class="p">:</span> <span class="s">"Linux + Docker"</span><span class="p">,</span>
+  location<span class="p">:</span> <span class="s">"Nepal"</span><span class="p">,</span>
+  focus<span class="p">:</span> <span class="s">"clean, reliable APIs"</span><span class="p">,</span>
+  learning<span class="p">:</span> <span class="s">"Rust"</span><span class="p">,</span>
+}<span class="p">;</span></pre>
+          <div class="status"><span class="ping"></span> Open to interesting problems</div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- BLOG -->
+    <section class="view" id="view-blog" data-view="blog">
+      <p class="eyebrow">Blog</p>
+      <h2 class="head">Blog</h2>
+      <p class="lead">Longer writing, once I have something worked out.</p>
+      <div class="list" id="blogList"></div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="view" id="view-notes" data-view="notes">
+      <p class="eyebrow">Notes</p>
+      <h2 class="head">Notes</h2>
+      <p class="lead">Short, unpolished, thinking out loud.</p>
+      <div class="list" id="noteList"></div>
+    </section>
+
+    <!-- TECH -->
+    <section class="view" id="view-tech" data-view="tech">
+      <p class="eyebrow">Tech Used</p>
+      <h2 class="head">Tools I build with</h2>
+      <p class="lead">The stack I reach for across the front end, the back end, and everything running in production.</p>
+      <div class="tech-grid" id="techGrid"></div>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="view" id="view-search" data-view="search">
+      <p class="eyebrow">Search</p>
+      <div class="search-top">
+        <h2 class="head" id="searchHead">Search</h2>
+        <span class="result-count" id="resultCount"></span>
+      </div>
+      <p class="lead" id="searchLead">Type in the box above to search across the blog and notes.</p>
+      <div class="list" id="searchList"></div>
+    </section>
+
+    <!-- READ (full article) -->
+    <section class="view" id="view-read" data-view="read">
+      <a class="back" id="articleBack" href="#blog">&larr; Back</a>
+      <div id="articleHead"></div>
+      <div class="article" id="articleBody"></div>
+    </section>
+
+    <!-- PUBLISH (hidden route: #admin) -->
+    <section class="view" id="view-admin" data-view="admin">
+      <p class="eyebrow">Publish</p>
+      <h2 class="head">Add a post or note</h2>
+      <p class="lead">Private editor. This is not linked anywhere on the site, reach it at <b>#admin</b>.</p>
+      <div class="panel-note">
+        Entries are saved in this browser so you can preview them right away. To make them public for
+        every visitor, press <b>Export content.js</b> and put that file next to <b>index.html</b> on your host.
+      </div>
+      <div class="seg" id="kindSeg">
+        <button type="button" data-kind="blog" class="on">Blog post</button>
+        <button type="button" data-kind="note">Note</button>
+      </div>
+      <form class="publish" id="publishForm">
+        <div class="row2">
+          <label>Title<input id="f-title" type="text" required placeholder="Post title"></label>
+          <label>Date<input id="f-date" type="date" required></label>
+        </div>
+        <label>Tags <span class="hint">(comma separated)</span><input id="f-tags" type="text" placeholder="Node.js, MongoDB"></label>
+        <label>Summary <span class="hint">(short line shown in the list; leave blank to auto-fill from the body)</span><textarea id="f-summary" placeholder="One or two sentences"></textarea></label>
+        <label>Body <span class="hint">Markdown: # headings, **bold**, *italic*, `inline code`, ```fenced code blocks```, - lists, 1. lists, &gt; quotes, [links](url)</span>
+          <div class="md-toolbar">
+            <div class="md-tabs" id="mdTabs">
+              <button type="button" data-md="write" class="on">Write</button>
+              <button type="button" data-md="preview">Preview</button>
+            </div>
+            <button type="button" class="md-imgbtn" id="imgBtn" title="Embed an image or screenshot">＋ Image</button>
+            <span class="hint" id="imgHint">or just paste a screenshot into the box</span>
+          </div>
+          <textarea id="f-body" placeholder="# My heading&#10;&#10;Write the full article here in Markdown.&#10;&#10;```js&#10;console.log('code blocks work too');&#10;```&#10;&#10;Add a screenshot with the + Image button, or paste one directly."></textarea>
+          <input type="file" id="imgFile" accept="image/*" hidden>
+          <div class="md-preview article" id="mdPreview" hidden></div>
+        </label>
+        <label>External link <span class="hint">(optional, e.g. original source)</span><input id="f-link" type="url" placeholder="https://..."></label>
+        <div class="btns">
+          <button type="submit" class="btn primary" id="saveBtn">Save entry</button>
+          <button type="button" class="btn" id="resetBtn">Clear form</button>
+        </div>
+      </form>
+      <div class="btns" style="margin-top:26px">
+        <button type="button" class="btn primary" id="exportBtn">Export content.js</button>
+        <button type="button" class="btn" id="copyBtn">Copy JSON</button>
+        <button type="button" class="btn" id="importBtn">Import JSON</button>
+        <input type="file" id="importFile" accept=".js,.json,application/json,text/javascript" hidden>
+      </div>
+      <div class="admin-list" id="adminList"></div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <p class="quote">Turning <code>undefined is not a function</code> into a lifestyle.</p>
+    <p class="foot-meta">© <span id="year"></span> Aadarsha Bhattarai</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- Published content (optional). Export from #admin and upload this file to publish for all visitors. -->
+<script src="content.js" onerror="void 0"></script>
+<script>
+/* ===== Tech stack (logos inlined, no external requests) ===== */
+var TECH = [
+  {name:"Node.js", color:"#5FA04E", path:"M11.998,24c-0.321,0-0.641-0.084-0.922-0.247l-2.936-1.737c-0.438-0.245-0.224-0.332-0.08-0.383 c0.585-0.203,0.703-0.25,1.328-0.604c0.065-0.037,0.151-0.023,0.218,0.017l2.256,1.339c0.082,0.045,0.197,0.045,0.272,0l8.795-5.076 c0.082-0.047,0.134-0.141,0.134-0.238V6.921c0-0.099-0.053-0.192-0.137-0.242l-8.791-5.072c-0.081-0.047-0.189-0.047-0.271,0 L3.075,6.68C2.99,6.729,2.936,6.825,2.936,6.921v10.15c0,0.097,0.054,0.189,0.139,0.235l2.409,1.392 c1.307,0.654,2.108-0.116,2.108-0.89V7.787c0-0.142,0.114-0.253,0.256-0.253h1.115c0.139,0,0.255,0.112,0.255,0.253v10.021 c0,1.745-0.95,2.745-2.604,2.745c-0.508,0-0.909,0-2.026-0.551L2.28,18.675c-0.57-0.329-0.922-0.945-0.922-1.604V6.921 c0-0.659,0.353-1.275,0.922-1.603l8.795-5.082c0.557-0.315,1.296-0.315,1.848,0l8.794,5.082c0.57,0.329,0.924,0.944,0.924,1.603 v10.15c0,0.659-0.354,1.273-0.924,1.604l-8.794,5.078C12.643,23.916,12.324,24,11.998,24z M19.099,13.993 c0-1.9-1.284-2.406-3.987-2.763c-2.731-0.361-3.009-0.548-3.009-1.187c0-0.528,0.235-1.233,2.258-1.233 c1.807,0,2.473,0.389,2.747,1.607c0.024,0.115,0.129,0.199,0.247,0.199h1.141c0.071,0,0.138-0.031,0.186-0.081 c0.048-0.054,0.074-0.123,0.067-0.196c-0.177-2.098-1.571-3.076-4.388-3.076c-2.508,0-4.004,1.058-4.004,2.833 c0,1.925,1.488,2.457,3.895,2.695c2.88,0.282,3.103,0.703,3.103,1.269c0,0.983-0.789,1.402-2.642,1.402 c-2.327,0-2.839-0.584-3.011-1.742c-0.02-0.124-0.126-0.215-0.253-0.215h-1.137c-0.141,0-0.254,0.112-0.254,0.253 c0,1.482,0.806,3.248,4.655,3.248C17.501,17.007,19.099,15.91,19.099,13.993z"},
+  {name:"TypeScript", color:"#3178C6", path:"M1.125 0C.502 0 0 .502 0 1.125v21.75C0 23.498.502 24 1.125 24h21.75c.623 0 1.125-.502 1.125-1.125V1.125C24 .502 23.498 0 22.875 0zm17.363 9.75c.612 0 1.154.037 1.627.111a6.38 6.38 0 0 1 1.306.34v2.458a3.95 3.95 0 0 0-.643-.361 5.093 5.093 0 0 0-.717-.26 5.453 5.453 0 0 0-1.426-.2c-.3 0-.573.028-.819.086a2.1 2.1 0 0 0-.623.242c-.17.104-.3.229-.393.374a.888.888 0 0 0-.14.49c0 .196.053.373.156.529.104.156.252.304.443.444s.423.276.696.41c.273.135.582.274.926.416.47.197.892.407 1.266.628.374.222.695.473.963.753.268.279.472.598.614.957.142.359.214.776.214 1.253 0 .657-.125 1.21-.373 1.656a3.033 3.033 0 0 1-1.012 1.085 4.38 4.38 0 0 1-1.487.596c-.566.12-1.163.18-1.79.18a9.916 9.916 0 0 1-1.84-.164 5.544 5.544 0 0 1-1.512-.493v-2.63a5.033 5.033 0 0 0 3.237 1.2c.333 0 .624-.03.872-.09.249-.06.456-.144.623-.25.166-.108.29-.234.373-.38a1.023 1.023 0 0 0-.074-1.089 2.12 2.12 0 0 0-.537-.5 5.597 5.597 0 0 0-.807-.444 27.72 27.72 0 0 0-1.007-.436c-.918-.383-1.602-.852-2.053-1.405-.45-.553-.676-1.222-.676-2.005 0-.614.123-1.141.369-1.582.246-.441.58-.804 1.004-1.089a4.494 4.494 0 0 1 1.47-.629 7.536 7.536 0 0 1 1.77-.201zm-15.113.188h9.563v2.166H9.506v9.646H6.789v-9.646H3.375z"},
+  {name:"MongoDB", color:"#47A248", path:"M17.193 9.555c-1.264-5.58-4.252-7.414-4.573-8.115-.28-.394-.53-.954-.735-1.44-.036.495-.055.685-.523 1.184-.723.566-4.438 3.682-4.74 10.02-.282 5.912 4.27 9.435 4.888 9.884l.07.05A73.49 73.49 0 0111.91 24h.481c.114-1.032.284-2.056.51-3.07.417-.296.604-.463.85-.693a11.342 11.342 0 003.639-8.464c.01-.814-.103-1.662-.197-2.218zm-5.336 8.195s0-8.291.275-8.29c.213 0 .49 10.695.49 10.695-.381-.045-.765-1.76-.765-2.405z"},
+  {name:"Express", color:"#000000", path:"M12.262 16.666h1.146l6.975-9.325H19.22zm9.778 1.441v.004l-4.334-5.706-.557.74 4.873 6.682H.945V4.173h9.505l5.026 6.7.574-.772-4.374-5.928h.003l-.719-.945H0v17.544h24zM10.917 8.705a3.8 3.8 0 0 0-1.292-1.183q-.796-.45-1.916-.45c-.746 0-1.37.14-1.906.424a3.76 3.76 0 0 0-1.31 1.12 4.9 4.9 0 0 0-.75 1.581 7.17 7.17 0 0 0 0 3.696c.148.567.402 1.101.75 1.573a3.5 3.5 0 0 0 1.31 1.066q.803.39 1.906.389 1.77 0 2.739-.868.966-.867 1.328-2.457h-1.139q-.271 1.084-.977 1.734-.704.651-1.952.65-.812 0-1.392-.342a3.1 3.1 0 0 1-.957-.869 3.5 3.5 0 0 1-.551-1.182 5 5 0 0 1-.17-1.133 9 9 0 0 0-.015-.286 4.5 4.5 0 0 1 .015-.829c.047-.418.147-.83.296-1.223A3.7 3.7 0 0 1 5.54 9.05a2.9 2.9 0 0 1 .922-.742q.541-.28 1.246-.28c.47 0 .869.093 1.23.28q.541.281.922.742.379.461.587 1.057t.225 1.246H5.625l.004.957h6.182a7.3 7.3 0 0 0-.18-1.924 4.9 4.9 0 0 0-.715-1.68z"},
+  {name:"React", color:"#61DAFB", path:"M14.23 12.004a2.236 2.236 0 0 1-2.235 2.236 2.236 2.236 0 0 1-2.236-2.236 2.236 2.236 0 0 1 2.235-2.236 2.236 2.236 0 0 1 2.236 2.236zm2.648-10.69c-1.346 0-3.107.96-4.888 2.622-1.78-1.653-3.542-2.602-4.887-2.602-.41 0-.783.093-1.106.278-1.375.793-1.683 3.264-.973 6.365C1.98 8.917 0 10.42 0 12.004c0 1.59 1.99 3.097 5.043 4.03-.704 3.113-.39 5.588.988 6.38.32.187.69.275 1.102.275 1.345 0 3.107-.96 4.888-2.624 1.78 1.654 3.542 2.603 4.887 2.603.41 0 .783-.09 1.106-.275 1.374-.792 1.683-3.263.973-6.365C22.02 15.096 24 13.59 24 12.004c0-1.59-1.99-3.097-5.043-4.032.704-3.11.39-5.587-.988-6.38-.318-.184-.688-.277-1.092-.278zm-.005 1.09v.006c.225 0 .406.044.558.127.666.382.955 1.835.73 3.704-.054.46-.142.945-.25 1.44-.96-.236-2.006-.417-3.107-.534-.66-.905-1.345-1.727-2.035-2.447 1.592-1.48 3.087-2.292 4.105-2.295zm-9.77.02c1.012 0 2.514.808 4.11 2.28-.686.72-1.37 1.537-2.02 2.442-1.107.117-2.154.298-3.113.538-.112-.49-.195-.964-.254-1.42-.23-1.868.054-3.32.714-3.707.19-.09.4-.127.563-.132zm4.882 3.05c.455.468.91.992 1.36 1.564-.44-.02-.89-.034-1.345-.034-.46 0-.915.01-1.36.034.44-.572.895-1.096 1.345-1.565zM12 8.1c.74 0 1.477.034 2.202.093.406.582.802 1.203 1.183 1.86.372.64.71 1.29 1.018 1.946-.308.655-.646 1.31-1.013 1.95-.38.66-.773 1.288-1.18 1.87-.728.063-1.466.098-2.21.098-.74 0-1.477-.035-2.202-.093-.406-.582-.802-1.204-1.183-1.86-.372-.64-.71-1.29-1.018-1.946.303-.657.646-1.313 1.013-1.954.38-.66.773-1.286 1.18-1.868.728-.064 1.466-.098 2.21-.098zm-3.635.254c-.24.377-.48.763-.704 1.16-.225.39-.435.782-.635 1.174-.265-.656-.49-1.31-.676-1.947.64-.15 1.315-.283 2.015-.386zm7.26 0c.695.103 1.365.23 2.006.387-.18.632-.405 1.282-.66 1.933-.2-.39-.41-.783-.64-1.174-.225-.392-.465-.774-.705-1.146zm3.063.675c.484.15.944.317 1.375.498 1.732.74 2.852 1.708 2.852 2.476-.005.768-1.125 1.74-2.857 2.475-.42.18-.88.342-1.355.493-.28-.958-.646-1.956-1.1-2.98.45-1.017.81-2.01 1.085-2.964zm-13.395.004c.278.96.645 1.957 1.1 2.98-.45 1.017-.812 2.01-1.086 2.964-.484-.15-.944-.318-1.37-.5-1.732-.737-2.852-1.706-2.852-2.474 0-.768 1.12-1.742 2.852-2.476.42-.18.88-.342 1.356-.494zm11.678 4.28c.265.657.49 1.312.676 1.948-.64.157-1.316.29-2.016.39.24-.375.48-.762.705-1.158.225-.39.435-.788.636-1.18zm-9.945.02c.2.392.41.783.64 1.175.23.39.465.772.705 1.143-.695-.102-1.365-.23-2.006-.386.18-.63.406-1.282.66-1.933zM17.92 16.32c.112.493.2.968.254 1.423.23 1.868-.054 3.32-.714 3.708-.147.09-.338.128-.563.128-1.012 0-2.514-.807-4.11-2.28.686-.72 1.37-1.536 2.02-2.44 1.107-.118 2.154-.3 3.113-.54zm-11.83.01c.96.234 2.006.415 3.107.532.66.905 1.345 1.727 2.035 2.446-1.595 1.483-3.092 2.295-4.11 2.295-.22-.005-.406-.05-.553-.132-.666-.38-.955-1.834-.73-3.703.054-.46.142-.944.25-1.438zm4.56.64c.44.02.89.034 1.345.034.46 0 .915-.01 1.36-.034-.44.572-.895 1.095-1.345 1.565-.455-.47-.91-.993-1.36-1.565z"},
+  {name:"Redis", color:"#FF4438", path:"M22.71 13.145c-1.66 2.092-3.452 4.483-7.038 4.483-3.203 0-4.397-2.825-4.48-5.12.701 1.484 2.073 2.685 4.214 2.63 4.117-.133 6.94-3.852 6.94-7.239 0-4.05-3.022-6.972-8.268-6.972-3.752 0-8.4 1.428-11.455 3.685C2.59 6.937 3.885 9.958 4.35 9.626c2.648-1.904 4.748-3.13 6.784-3.744C8.12 9.244.886 17.05 0 18.425c.1 1.261 1.66 4.648 2.424 4.648.232 0 .431-.133.664-.365a100.49 100.49 0 0 0 5.54-6.765c.222 3.104 1.748 6.898 6.014 6.898 3.819 0 7.604-2.756 9.33-8.965.2-.764-.73-1.361-1.261-.73zm-4.349-5.013c0 1.959-1.926 2.922-3.685 2.922-.941 0-1.664-.247-2.235-.568 1.051-1.592 2.092-3.225 3.21-4.973 1.972.334 2.71 1.43 2.71 2.619z"},
+  {name:"Linux", color:"#FCC624", path:"M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z"},
+  {name:"Grafana", color:"#F46800", path:"M23.02 10.59a8.578 8.578 0 0 0-.862-3.034 8.911 8.911 0 0 0-1.789-2.445c.337-1.342-.413-2.505-.413-2.505-1.292-.08-2.113.4-2.416.62-.052-.02-.102-.044-.154-.064-.22-.089-.446-.172-.677-.247-.231-.073-.47-.14-.711-.197a9.867 9.867 0 0 0-.875-.161C14.557.753 12.94 0 12.94 0c-1.804 1.145-2.147 2.744-2.147 2.744l-.018.093c-.098.029-.2.057-.298.088-.138.042-.275.094-.413.143-.138.055-.275.107-.41.166a8.869 8.869 0 0 0-1.557.87l-.063-.029c-2.497-.955-4.716.195-4.716.195-.203 2.658.996 4.33 1.235 4.636a11.608 11.608 0 0 0-.607 2.635C1.636 12.677.953 15.014.953 15.014c1.926 2.214 4.171 2.351 4.171 2.351.003-.002.006-.002.006-.005.285.509.615.994.986 1.446.156.19.32.371.488.548-.704 2.009.099 3.68.099 3.68 2.144.08 3.553-.937 3.849-1.173a9.784 9.784 0 0 0 3.164.501h.08l.055-.003.107-.002.103-.005.003.002c1.01 1.44 2.788 1.646 2.788 1.646 1.264-1.332 1.337-2.653 1.337-2.94v-.058c0-.02-.003-.039-.003-.06.265-.187.52-.387.758-.6a7.875 7.875 0 0 0 1.415-1.7c1.43.083 2.437-.885 2.437-.885-.236-1.49-1.085-2.216-1.264-2.354l-.018-.013-.016-.013a.217.217 0 0 1-.031-.02c.008-.092.016-.18.02-.27.011-.162.016-.323.016-.48v-.253l-.005-.098-.008-.135a1.891 1.891 0 0 0-.01-.13c-.003-.042-.008-.083-.013-.125l-.016-.124-.018-.122a6.215 6.215 0 0 0-2.032-3.73 6.015 6.015 0 0 0-3.222-1.46 6.292 6.292 0 0 0-.85-.048l-.107.002h-.063l-.044.003-.104.008a4.777 4.777 0 0 0-3.335 1.695c-.332.4-.592.84-.768 1.297a4.594 4.594 0 0 0-.312 1.817l.003.091c.005.055.007.11.013.164a3.615 3.615 0 0 0 .698 1.82 3.53 3.53 0 0 0 1.827 1.282c.33.098.66.14.971.137.039 0 .078 0 .114-.002l.063-.003c.02 0 .041-.003.062-.003.034-.002.065-.007.099-.01.007 0 .018-.003.028-.003l.031-.005.06-.008a1.18 1.18 0 0 0 .112-.02c.036-.008.072-.013.109-.024a2.634 2.634 0 0 0 .914-.415c.028-.02.056-.041.085-.065a.248.248 0 0 0 .039-.35.244.244 0 0 0-.309-.06l-.078.042c-.09.044-.184.083-.283.116a2.476 2.476 0 0 1-.475.096c-.028.003-.054.006-.083.006l-.083.002c-.026 0-.054 0-.08-.002l-.102-.006h-.012l-.024.006c-.016-.003-.031-.003-.044-.006-.031-.002-.06-.007-.091-.01a2.59 2.59 0 0 1-.724-.213 2.557 2.557 0 0 1-.667-.438 2.52 2.52 0 0 1-.805-1.475 2.306 2.306 0 0 1-.029-.444l.006-.122v-.023l.002-.031c.003-.021.003-.04.005-.06a3.163 3.163 0 0 1 1.352-2.29 3.12 3.12 0 0 1 .937-.43 2.946 2.946 0 0 1 .776-.101h.06l.07.002.045.003h.026l.07.005a4.041 4.041 0 0 1 1.635.49 3.94 3.94 0 0 1 1.602 1.662 3.77 3.77 0 0 1 .397 1.414l.005.076.003.075c.002.026.002.05.002.075 0 .024.003.052 0 .07v.065l-.002.073-.008.174a6.195 6.195 0 0 1-.08.639 5.1 5.1 0 0 1-.267.927 5.31 5.31 0 0 1-.624 1.13 5.052 5.052 0 0 1-3.237 2.014 4.82 4.82 0 0 1-.649.066l-.039.003h-.287a6.607 6.607 0 0 1-1.716-.265 6.776 6.776 0 0 1-3.4-2.274 6.75 6.75 0 0 1-.746-1.15 6.616 6.616 0 0 1-.714-2.596l-.005-.083-.002-.02v-.056l-.003-.073v-.096l-.003-.104v-.07l.003-.163c.008-.22.026-.45.054-.678a8.707 8.707 0 0 1 .28-1.355c.128-.444.286-.872.473-1.277a7.04 7.04 0 0 1 1.456-2.1 5.925 5.925 0 0 1 .953-.763c.169-.111.343-.213.524-.306.089-.05.182-.091.273-.135.047-.02.093-.042.138-.062a7.177 7.177 0 0 1 .714-.267l.145-.045c.049-.015.098-.026.148-.041.098-.029.197-.052.296-.076.049-.013.1-.02.15-.033l.15-.032.151-.028.076-.013.075-.01.153-.024c.057-.01.114-.013.171-.023l.169-.021c.036-.003.073-.008.106-.01l.073-.008.036-.003.042-.002c.057-.003.114-.008.171-.01l.086-.006h.023l.037-.003.145-.007a7.999 7.999 0 0 1 1.708.125 7.917 7.917 0 0 1 2.048.68 8.253 8.253 0 0 1 1.672 1.09l.09.077.089.078c.06.052.114.107.171.159.057.052.112.106.166.16.052.055.107.107.159.164a8.671 8.671 0 0 1 1.41 1.978c.012.026.028.052.04.078l.04.078.075.156c.023.051.05.1.07.153l.065.15a8.848 8.848 0 0 1 .45 1.34.19.19 0 0 0 .201.142.186.186 0 0 0 .172-.184c.01-.246.002-.532-.024-.856z"},
+  {name:"Docker", color:"#2496ED", path:"M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m0 2.716h2.118a.187.187 0 00.186-.186V6.29a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.887c0 .102.082.185.185.186m-2.93 0h2.12a.186.186 0 00.184-.186V6.29a.185.185 0 00-.185-.185H8.1a.185.185 0 00-.185.185v1.887c0 .102.083.185.185.186m-2.964 0h2.119a.186.186 0 00.185-.186V6.29a.185.185 0 00-.185-.185H5.136a.186.186 0 00-.186.185v1.887c0 .102.084.185.186.186m5.893 2.715h2.118a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.185m-2.93 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.083.185.185.185m-2.964 0h2.119a.185.185 0 00.185-.185V9.006a.185.185 0 00-.184-.186h-2.12a.186.186 0 00-.186.186v1.887c0 .102.084.185.186.185m-2.92 0h2.12a.185.185 0 00.184-.185V9.006a.185.185 0 00-.184-.186h-2.12a.185.185 0 00-.184.185v1.888c0 .102.082.185.185.185M23.763 9.89c-.065-.051-.672-.51-1.954-.51-.338.001-.676.03-1.01.087-.248-1.7-1.653-2.53-1.716-2.566l-.344-.199-.226.327c-.284.438-.49.922-.612 1.43-.23.97-.09 1.882.403 2.661-.595.332-1.55.413-1.744.42H.751a.751.751 0 00-.75.748 11.376 11.376 0 00.692 4.062c.545 1.428 1.355 2.48 2.41 3.124 1.18.723 3.1 1.137 5.275 1.137.983.003 1.963-.086 2.93-.266a12.248 12.248 0 003.823-1.389c.98-.567 1.86-1.288 2.61-2.136 1.252-1.418 1.998-2.997 2.553-4.4h.221c1.372 0 2.215-.549 2.68-1.009.309-.293.55-.65.707-1.046l.098-.288Z"},
+];
+</script>
+<script>
+(function(){
+  "use strict";
+  var root = document.documentElement;
+
+  /* ---------- Theme ---------- */
+  var ICONS = {
+    system:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+    light:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+    dark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>'
+  };
+  var ORDER = ["system","light","dark"];
+  var themeBtn = document.getElementById("theme");
+  function applyTheme(v){
+    if(v === "system"){ root.removeAttribute("data-theme"); } else { root.setAttribute("data-theme", v); }
+    themeBtn.innerHTML = ICONS[v] || ICONS.system;
+    themeBtn.title = "Theme: " + v.charAt(0).toUpperCase() + v.slice(1) + " (click to change)";
+    try{ localStorage.setItem("portfolio:theme", v); }catch(e){}
+  }
+  var theme = "system";
+  try{ theme = localStorage.getItem("portfolio:theme") || "system"; }catch(e){}
+  applyTheme(theme);
+  themeBtn.addEventListener("click", function(){ theme = ORDER[(ORDER.indexOf(theme)+1)%ORDER.length]; applyTheme(theme); });
+
+  /* ---------- Toast ---------- */
+  var toastEl = document.getElementById("toast"), toastT;
+  function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, 2000); }
+
+  /* ---------- Escape + Markdown renderer (no dependency) ---------- */
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function safeUrl(u){
+    var s = String(u || "").trim();
+    if(/^(https?:|mailto:|#|\/|\.\/|\.\.\/)/i.test(s)) return s;
+    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)) return "mailto:" + s;
+    return "#";
+  }
+  function safeImg(u){
+    var s = String(u || "").trim();
+    if(/^data:image\//i.test(s) || /^https?:/i.test(s) || /^(#|\/|\.\/|\.\.\/)/.test(s)) return s;
+    return "#";
+  }
+  function inlineMd(t){
+    // t is already HTML-escaped
+    t = t.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function(_, alt, u){ return '<img src="'+safeImg(u)+'" alt="'+alt+'">'; });
+    t = t.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function(_, txt, u){ return '<a href="'+safeUrl(u)+'" target="_blank" rel="noopener">'+txt+'</a>'; });
+    t = t.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+    t = t.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+    t = t.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+    t = t.replace(/(^|[^\w])_([^_\n]+)_/g, "$1<em>$2</em>");
+    t = t.replace(/~~([^~]+)~~/g, "<del>$1</del>");
+    return t;
+  }
+  function mdToHtml(src){
+    if(!src || !String(src).trim()) return "";
+    var md = String(src).replace(/\r\n?/g, "\n");
+    var codeBlocks = [];
+    md = md.replace(/```[ \t]*([^\n`]*)\n([\s\S]*?)```/g, function(_, lang, code){
+      codeBlocks.push(code.replace(/\n$/, ""));
+      return "CB" + (codeBlocks.length - 1) + "";
+    });
+    md = esc(md); // escape everything else
+    var inlineCodes = [];
+    md = md.replace(/`([^`]+)`/g, function(_, c){ inlineCodes.push(c); return "IC" + (inlineCodes.length - 1) + ""; });
+
+    var lines = md.split("\n"), out = [], i = 0;
+    var isBlank = function(l){ return /^\s*$/.test(l); };
+    var isBlock = function(l){
+      return /^#{1,6}\s/.test(l) || /^>\s?/.test(l) || /^\s*[-*+]\s+/.test(l) || /^\s*\d+\.\s+/.test(l) ||
+             /^(-{3,}|\*{3,}|_{3,})\s*$/.test(l) || /^CB\d+\s*$/.test(l) || isBlank(l);
+    };
+    while(i < lines.length){
+      var line = lines[i];
+      var cb = line.match(/^CB(\d+)\s*$/);
+      if(cb){ out.push('<pre class="cb"><code>' + esc(codeBlocks[+cb[1]]) + '</code></pre>'); i++; continue; }
+      var h = line.match(/^(#{1,6})\s+(.*)$/);
+      if(h){ var lv = h[1].length; out.push("<h" + lv + ">" + inlineMd(h[2]) + "</h" + lv + ">"); i++; continue; }
+      if(/^(-{3,}|\*{3,}|_{3,})\s*$/.test(line)){ out.push("<hr>"); i++; continue; }
+      if(/^>\s?/.test(line)){ var q = []; while(i < lines.length && /^>\s?/.test(lines[i])){ q.push(inlineMd(lines[i].replace(/^>\s?/, ""))); i++; } out.push("<blockquote>" + q.join("<br>") + "</blockquote>"); continue; }
+      if(/^\s*[-*+]\s+/.test(line)){ var ui = []; while(i < lines.length && /^\s*[-*+]\s+/.test(lines[i])){ ui.push("<li>" + inlineMd(lines[i].replace(/^\s*[-*+]\s+/, "")) + "</li>"); i++; } out.push("<ul>" + ui.join("") + "</ul>"); continue; }
+      if(/^\s*\d+\.\s+/.test(line)){ var oi = []; while(i < lines.length && /^\s*\d+\.\s+/.test(lines[i])){ oi.push("<li>" + inlineMd(lines[i].replace(/^\s*\d+\.\s+/, "")) + "</li>"); i++; } out.push("<ol>" + oi.join("") + "</ol>"); continue; }
+      if(isBlank(line)){ i++; continue; }
+      var para = []; while(i < lines.length && !isBlock(lines[i])){ para.push(inlineMd(lines[i])); i++; }
+      out.push("<p>" + para.join("<br>") + "</p>");
+    }
+    var html = out.join("\n");
+    html = html.replace(/IC(\d+)/g, function(_, n){ return "<code>" + inlineCodes[+n] + "</code>"; });
+    html = html.replace(/CB(\d+)/g, function(_, n){ return '<pre class="cb"><code>' + esc(codeBlocks[+n]) + "</code></pre>"; });
+    return html;
+  }
+  function plainFromMd(src){
+    return String(src || "")
+      .replace(/```[\s\S]*?```/g, " ")
+      .replace(/`[^`]*`/g, " ")
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+      .replace(/\[([^\]]+)\]\([^)]*\)/g, "$1")
+      .replace(/[#>*_~\-]+/g, " ")
+      .replace(/\s+/g, " ").trim();
+  }
+
+  /* ---------- Content store ---------- */
+  var SEED = {
+    blog: [
+      {id:"b1", title:"Setting up a clean Node and TypeScript API", date:"2026-08-24", tags:["Node.js","TypeScript","Express"],
+        summary:"The folder layout, tsconfig, and Express setup I reuse on every new backend so I can start building features on day one.",
+        body:"Every new backend starts the same way for me. Instead of improvising, I keep a small template so I can get to real work faster.\n\n## Folder layout\n\nI split by responsibility, not by type:\n\n- `src/routes` for HTTP\n- `src/services` for business logic\n- `src/db` for data access\n\n## A strict tsconfig\n\nStrict mode catches a surprising number of bugs before they run:\n\n```json\n{\n  \"compilerOptions\": {\n    \"strict\": true,\n    \"target\": \"ES2022\",\n    \"module\": \"NodeNext\"\n  }\n}\n```\n\n## Express in a few lines\n\n```ts\nimport express from \"express\";\n\nconst app = express();\napp.use(express.json());\napp.get(\"/health\", (_req, res) => res.json({ ok: true }));\napp.listen(3000);\n```\n\nThat is the whole starting point. Everything else grows from here.",
+        link:""},
+      {id:"b2", title:"Caching with Redis without shooting yourself in the foot", date:"2026-08-10", tags:["Redis","Node.js"],
+        summary:"Where a cache actually helps, how I key it, and the invalidation rules that keep stale data from creeping in.",
+        body:"A cache is easy to add and easy to get wrong. Here is the checklist I run through.\n\n### 1. Cache reads, not truth\n\nThe database stays the source of truth. Redis only holds a fast copy.\n\n### 2. Key it clearly\n\n```\nuser:123:profile\n```\n\nNamespaced keys make it obvious what to delete later.\n\n### 3. Always set a TTL\n\n> A cache without expiry is just a second database you forgot to update.\n\nStart with a short TTL and lengthen it only when you have numbers to justify it.",
+        link:""}
+    ],
+    notes: [
+      {id:"n1", title:"Docker layer caching saved my build times", date:"2026-09-02", tags:["Docker"],
+        summary:"Reordered the Dockerfile so dependencies install before copying source. Builds went from slow to quick.",
+        body:"Small change, big payoff. Copy the lockfiles and install **before** copying the rest of the source, so the dependency layer is cached:\n\n```dockerfile\nCOPY package*.json ./\nRUN npm ci\nCOPY . .\n```\n\nNow editing a source file no longer reinstalls every dependency.",
+        link:""},
+      {id:"n2", title:"Grafana dashboards are worth the afternoon", date:"2026-08-19", tags:["Grafana","Linux"],
+        summary:"Spent an afternoon wiring up dashboards. Now I actually see problems before users report them.",
+        body:"Metrics you never look at are just noise. Once the dashboard was up, two things changed:\n\n1. I noticed a slow endpoint before anyone complained.\n2. Deploys got less scary, because I could watch them.\n\nWorth every minute.",
+        link:""}
+    ]
+  };
+  var STORE_KEY = "portfolio:content";
+  function normalize(data){
+    ["blog","notes"].forEach(function(k){
+      (data[k] || []).forEach(function(e){ if(e.body == null) e.body = ""; if(e.summary == null) e.summary = ""; if(!e.tags) e.tags = []; });
+    });
+    return data;
+  }
+  function loadContent(){
+    var data = (window.PORTFOLIO_CONTENT && window.PORTFOLIO_CONTENT.blog) ? window.PORTFOLIO_CONTENT : SEED;
+    try{ var ls = localStorage.getItem(STORE_KEY); if(ls){ var p = JSON.parse(ls); if(p && p.blog && p.notes) data = p; } }catch(e){}
+    return normalize(JSON.parse(JSON.stringify(data)));
+  }
+  var content = loadContent();
+  function persist(){ try{ localStorage.setItem(STORE_KEY, JSON.stringify(content)); }catch(e){} }
+
+  /* ---------- List rendering ---------- */
+  function fmtDate(iso){ if(!iso) return ""; var d = new Date(iso + "T00:00:00"); if(isNaN(d)) return esc(iso); return d.toLocaleDateString("en-US", {year:"numeric", month:"short", day:"numeric"}); }
+  function tagsHtml(tags){ if(!tags || !tags.length) return ""; return tags.map(function(t){ return '<span class="tag">'+esc(t)+'</span>'; }).join(" "); }
+  function itemHtml(entry, kindLabel){
+    var meta = [];
+    if(kindLabel) meta.push('<span class="kind">'+esc(kindLabel)+'</span><span class="dot"></span>');
+    meta.push('<span class="mono-num">'+fmtDate(entry.date)+'</span>');
+    var tags = tagsHtml(entry.tags);
+    var href = "#read/" + encodeURIComponent(entry.id);
+    var excerpt = entry.summary || plainFromMd(entry.body).slice(0,160);
+    return '<article class="item"><div class="meta">'+meta.join("")+(tags ? '<span class="dot"></span>'+tags : '')+'</div>'+
+      '<h3><a href="'+href+'">'+esc(entry.title)+'</a></h3><p>'+esc(excerpt)+'</p>'+
+      '<a class="readmore" href="'+href+'">Read '+(kindLabel==="Note"?"note":"article")+' &rarr;</a></article>';
+  }
+  function renderList(el, arr, emptyMsg){
+    if(!arr.length){ el.innerHTML = '<div class="empty">'+esc(emptyMsg)+'</div>'; return; }
+    el.innerHTML = arr.map(function(e){ return itemHtml(e, ""); }).join("");
+  }
+  function renderBlog(){ renderList(document.getElementById("blogList"), content.blog, "No posts yet."); }
+  function renderNotes(){ renderList(document.getElementById("noteList"), content.notes, "No notes yet."); }
+
+  /* ---------- Tech grid ---------- */
+  (function(){
+    var grid = document.getElementById("techGrid");
+    grid.innerHTML = TECH.map(function(t){
+      return '<div class="tech"><span class="logo"><svg viewBox="0 0 24 24" role="img" aria-label="'+esc(t.name)+'"><path fill="'+t.color+'" d="'+t.path+'"/></svg></span><b>'+esc(t.name)+'</b></div>';
+    }).join("");
+  })();
+
+  /* ---------- Article reader ---------- */
+  function findEntry(id){
+    var i, e;
+    for(i=0;i<content.blog.length;i++){ if(content.blog[i].id === id) return {e:content.blog[i], kind:"Blog"}; }
+    for(i=0;i<content.notes.length;i++){ if(content.notes[i].id === id) return {e:content.notes[i], kind:"Note"}; }
+    return null;
+  }
+  function openArticle(id){
+    var head = document.getElementById("articleHead");
+    var body = document.getElementById("articleBody");
+    var back = document.getElementById("articleBack");
+    var f = findEntry(id);
+    if(!f){ back.setAttribute("href","#blog"); back.textContent = "← Back"; head.innerHTML = ""; body.innerHTML = '<div class="empty">This post could not be found.</div>'; return; }
+    var e = f.e;
+    back.setAttribute("href", f.kind === "Note" ? "#notes" : "#blog");
+    back.innerHTML = "&larr; Back to " + (f.kind === "Note" ? "notes" : "blog");
+    var meta = '<span class="kind">'+f.kind+'</span><span class="dot"></span><span class="mono-num">'+fmtDate(e.date)+'</span>';
+    var tags = tagsHtml(e.tags); if(tags) meta += '<span class="dot"></span>'+tags;
+    var src = e.link ? '<p style="margin-top:14px"><a class="readmore" href="'+esc(e.link)+'" target="_blank" rel="noopener">Original source &rarr;</a></p>' : '';
+    head.innerHTML = '<div class="meta">'+meta+'</div><h1 class="article-title">'+esc(e.title)+'</h1>'+src;
+    var md = (e.body && e.body.trim()) ? e.body : (e.summary || "");
+    body.innerHTML = mdToHtml(md) || '<p style="color:var(--muted)">No content yet.</p>';
+    document.title = e.title + " - Aadarsha Bhattarai";
+  }
+
+  /* ---------- Router ---------- */
+  var VALID = {about:1, blog:1, notes:1, tech:1, search:1, admin:1, read:1};
+  var q = document.getElementById("q");
+  var searchBox = document.getElementById("search");
+  var tabs = document.getElementById("tabs");
+  function parseHash(){
+    var h = (location.hash || "#about").replace(/^#/, "");
+    var m = h.match(/^read\/(.+)$/);
+    if(m) return {view:"read", id:decodeURIComponent(m[1])};
+    return {view:h, id:null};
+  }
+  function setView(name, id){
+    if(!VALID[name]) name = "about";
+    document.querySelectorAll(".view").forEach(function(v){ v.classList.toggle("active", v.dataset.view === name); });
+    var activeTab = name;
+    if(name === "read"){ var f = id ? findEntry(id) : null; activeTab = f && f.kind === "Note" ? "notes" : (f ? "blog" : ""); }
+    tabs.querySelectorAll("a").forEach(function(a){ a.classList.toggle("active", a.dataset.view === activeTab); });
+    if(name === "blog") renderBlog();
+    if(name === "notes") renderNotes();
+    if(name === "tech") { /* static */ }
+    if(name === "admin") renderAdmin();
+    if(name === "search") runSearch();
+    if(name === "read") openArticle(id);
+    else document.title = "Aadarsha Bhattarai";
+    window.scrollTo({top:0, behavior:"auto"});
+  }
+  function route(){ var r = parseHash(); setView(r.view, r.id); }
+  window.addEventListener("hashchange", route);
+
+  /* ---------- Search ---------- */
+  function matches(entry, term){ return (entry.title+" "+(entry.summary||"")+" "+plainFromMd(entry.body)+" "+(entry.tags||[]).join(" ")).toLowerCase().indexOf(term) !== -1; }
+  function runSearch(){
+    var term = q.value.trim().toLowerCase();
+    var head = document.getElementById("searchHead"), lead = document.getElementById("searchLead");
+    var count = document.getElementById("resultCount"), list = document.getElementById("searchList");
+    if(!term){ head.textContent = "Search"; count.textContent = ""; lead.textContent = "Type in the box above to search across the blog and notes."; list.innerHTML = ""; return; }
+    var res = [];
+    content.blog.forEach(function(e){ if(matches(e, term)) res.push([e,"Blog"]); });
+    content.notes.forEach(function(e){ if(matches(e, term)) res.push([e,"Note"]); });
+    head.textContent = 'Results for "' + q.value.trim() + '"';
+    count.textContent = res.length + (res.length === 1 ? " match" : " matches");
+    lead.textContent = "";
+    list.innerHTML = res.length ? res.map(function(r){ return itemHtml(r[0], r[1]); }).join("") : '<div class="empty">Nothing matched. Try another word.</div>';
+  }
+  function syncSearchUi(){ searchBox.classList.toggle("typing", q.value.length > 0); }
+  q.addEventListener("input", function(){
+    syncSearchUi();
+    if(q.value.trim()){ if(parseHash().view !== "search"){ location.hash = "search"; } else { runSearch(); } }
+    else if(parseHash().view === "search"){ runSearch(); }
+  });
+  document.getElementById("clear").addEventListener("click", function(){ q.value=""; syncSearchUi(); if(parseHash().view==="search") runSearch(); q.focus(); });
+  q.addEventListener("keydown", function(e){ if(e.key === "Escape"){ q.value=""; syncSearchUi(); if(parseHash().view==="search") location.hash="about"; } });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "/" && document.activeElement !== q && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)){ e.preventDefault(); q.focus(); }
+  });
+
+  /* ---------- Publish panel ---------- */
+  var curKind = "blog";
+  var kindSeg = document.getElementById("kindSeg");
+  var form = document.getElementById("publishForm");
+  var fTitle = document.getElementById("f-title"), fDate = document.getElementById("f-date"), fTags = document.getElementById("f-tags");
+  var fSummary = document.getElementById("f-summary"), fBody = document.getElementById("f-body"), fLink = document.getElementById("f-link");
+  var mdTabs = document.getElementById("mdTabs"), mdPreview = document.getElementById("mdPreview");
+
+  kindSeg.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-kind]"); if(!btn) return;
+    curKind = btn.dataset.kind;
+    kindSeg.querySelectorAll("button").forEach(function(b){ b.classList.toggle("on", b === btn); });
+    renderAdmin();
+  });
+  mdTabs.addEventListener("click", function(e){
+    var btn = e.target.closest("button[data-md]"); if(!btn) return;
+    var preview = btn.dataset.md === "preview";
+    mdTabs.querySelectorAll("button").forEach(function(b){ b.classList.toggle("on", b === btn); });
+    if(preview){ mdPreview.innerHTML = mdToHtml(fBody.value); }
+    mdPreview.hidden = !preview; fBody.hidden = preview;
+  });
+
+  /* ---- Insert screenshots / images (embedded as data URIs) ---- */
+  var imgBtn = document.getElementById("imgBtn"), imgFile = document.getElementById("imgFile");
+  function insertAtCursor(el, text){
+    var s = el.selectionStart, e = el.selectionEnd, v = el.value;
+    if(typeof s !== "number"){ el.value = v + text; return; }
+    el.value = v.slice(0, s) + text + v.slice(e);
+    var pos = s + text.length; el.selectionStart = el.selectionEnd = pos;
+    el.focus();
+  }
+  function embedImage(file){
+    if(!file || !/^image\//.test(file.type)){ toast("Please choose an image file"); return; }
+    if(file.size > 4 * 1024 * 1024){ toast("Image is large (over 4 MB); it will bloat content.js"); }
+    var reader = new FileReader();
+    reader.onload = function(){
+      var name = (file.name || "screenshot").replace(/\.[^.]+$/, "").replace(/[\[\]()]/g, "");
+      insertAtCursor(fBody, "\n\n![" + name + "](" + reader.result + ")\n\n");
+      toast("Image inserted");
+    };
+    reader.onerror = function(){ toast("Could not read that image"); };
+    reader.readAsDataURL(file);
+  }
+  imgBtn.addEventListener("click", function(){ imgFile.click(); });
+  imgFile.addEventListener("change", function(e){ if(e.target.files[0]) embedImage(e.target.files[0]); e.target.value = ""; });
+  fBody.addEventListener("paste", function(e){
+    var items = (e.clipboardData && e.clipboardData.items) || [];
+    for(var i = 0; i < items.length; i++){
+      if(items[i].type && items[i].type.indexOf("image") === 0){ e.preventDefault(); embedImage(items[i].getAsFile()); return; }
+    }
+  });
+
+  function todayISO(){ return new Date().toISOString().slice(0,10); }
+  function newId(){ return "e" + Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+  function resetMdTabs(){ mdTabs.querySelectorAll("button").forEach(function(b){ b.classList.toggle("on", b.dataset.md === "write"); }); mdPreview.hidden = true; fBody.hidden = false; }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var body = fBody.value;
+    var summary = fSummary.value.trim() || plainFromMd(body).slice(0,160);
+    var entry = { id:newId(), title:fTitle.value.trim(), date:fDate.value || todayISO(),
+      tags:fTags.value.split(",").map(function(s){ return s.trim(); }).filter(Boolean),
+      summary:summary, body:body, link:fLink.value.trim() };
+    if(!entry.title){ toast("A title is required"); return; }
+    if(!entry.summary && !entry.body.trim()){ toast("Add a summary or a body"); return; }
+    var arr = curKind === "blog" ? content.blog : content.notes;
+    arr.unshift(entry);
+    arr.sort(function(a,b){ return (b.date||"").localeCompare(a.date||""); });
+    persist(); form.reset(); fDate.value = todayISO(); resetMdTabs();
+    renderAdmin(); renderBlog(); renderNotes();
+    toast(curKind === "blog" ? "Blog post saved" : "Note saved");
+  });
+  document.getElementById("resetBtn").addEventListener("click", function(){ form.reset(); fDate.value = todayISO(); resetMdTabs(); });
+
+  function renderAdmin(){
+    if(fDate && !fDate.value) fDate.value = todayISO();
+    var arr = curKind === "blog" ? content.blog : content.notes;
+    var wrap = document.getElementById("adminList");
+    var heading = '<b style="font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)">Saved '+(curKind==="blog"?"posts":"notes")+' ('+arr.length+')</b>';
+    if(!arr.length){ wrap.innerHTML = heading + '<p class="lead">Nothing saved yet.</p>'; return; }
+    wrap.innerHTML = heading + arr.map(function(e){
+      return '<div class="admin-row"><div class="info"><b>'+esc(e.title)+'</b><span>'+fmtDate(e.date)+(e.tags&&e.tags.length?' • '+esc(e.tags.join(", ")):'')+'</span></div>'+
+        '<button class="del" data-id="'+e.id+'" data-kind="'+curKind+'">Delete</button></div>';
+    }).join("");
+  }
+  document.getElementById("adminList").addEventListener("click", function(e){
+    var btn = e.target.closest(".del"); if(!btn) return;
+    var arr = btn.dataset.kind === "blog" ? content.blog : content.notes;
+    var i = arr.findIndex(function(x){ return x.id === btn.dataset.id; });
+    if(i > -1){ arr.splice(i,1); persist(); renderAdmin(); renderBlog(); renderNotes(); toast("Deleted"); }
+  });
+
+  function contentJsText(){ return "window.PORTFOLIO_CONTENT = " + JSON.stringify(content, null, 2) + ";\n"; }
+  document.getElementById("exportBtn").addEventListener("click", function(){
+    var blob = new Blob([contentJsText()], {type:"text/javascript"});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a"); a.href = url; a.download = "content.js";
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+    toast("content.js downloaded");
+  });
+  document.getElementById("copyBtn").addEventListener("click", function(){
+    var text = JSON.stringify(content, null, 2);
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(function(){ toast("JSON copied"); }, function(){ toast("Copy failed"); }); }
+    else { toast("Copy not available"); }
+  });
+  document.getElementById("importBtn").addEventListener("click", function(){ document.getElementById("importFile").click(); });
+  document.getElementById("importFile").addEventListener("change", function(e){
+    var file = e.target.files[0]; if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try{
+        var text = String(reader.result);
+        var parsed = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+        if(!parsed.blog || !parsed.notes) throw new Error("bad shape");
+        content = normalize(parsed); persist(); renderAdmin(); renderBlog(); renderNotes(); toast("Imported");
+      }catch(err){ toast("Could not read that file"); }
+    };
+    reader.readAsText(file); e.target.value = "";
+  });
+
+  /* ---------- Init ---------- */
+  document.getElementById("year").textContent = new Date().getFullYear();
+  route();
+})();
+</script>
+</body>
+</html>
