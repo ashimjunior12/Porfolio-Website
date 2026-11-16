@@ -533,8 +533,10 @@ var TECH = [
     return data;
   }
   function loadContent(){
-    var data = (window.PORTFOLIO_CONTENT && window.PORTFOLIO_CONTENT.blog) ? window.PORTFOLIO_CONTENT : SEED;
-    try{ var ls = localStorage.getItem(STORE_KEY); if(ls){ var p = JSON.parse(ls); if(p && p.blog && p.notes) data = p; } }catch(e){}
+    var data = (window.PORTFOLIO_CONTENT && window.PORTFOLIO_CONTENT.blog)
+      ? window.PORTFOLIO_CONTENT
+      : SEED;
+
     return normalize(JSON.parse(JSON.stringify(data)));
   }
   var content = loadContent();
